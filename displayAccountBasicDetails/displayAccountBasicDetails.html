@@ -1,0 +1,45 @@
+<template>
+    <lightning-card title="AccountBasicDetails" icon-name="standard:account">
+        <div class="slds-var-m-around_medium">
+            <lightning-input
+                type="search"
+                onchange={handleCharacterChange}
+                class="slds-var-m-bottom_small"
+                label="Search Account"
+                value={searchKey}
+            ></lightning-input>
+        </div>
+
+        <template lwc:if={searchedAccounts.data}>
+            <lightning-layout class="slds-var-m-around_medium">
+                <lightning-layout-item>
+                    <template for:each={searchedAccounts.data} for:item="account">
+                        <c-account-list-item
+                            class="slds-show slds-is-relative"
+                            key={account.Id}
+                            account={account}
+                            onselect={handleSelect}
+                        ></c-account-list-item>
+                    </template>
+                </lightning-layout-item>
+
+                <lightning-layout-item class="slds-m-around_large">
+                    <template lwc:if={isAccDetailsVisible}>
+                        <div class="slds-text-heading_small">{selectedAccount.Name}</div> <br>
+                        <p>
+                            <lightning-formatted-phone
+                                value={selectedAccount.Phone}
+                            ></lightning-formatted-phone>
+                        </p>
+                        <p>Type: {selectedAccount.Type}</p>
+                        <p>Annual Revenue: {selectedAccount.AnnualRevenue}</p>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+        <template lwc:elseif={searchedAccounts.error}>
+            <c-error-panel errors={searchedAccounts.error}></c-error-panel>
+        </template>
+    </lightning-card>
+</template>
